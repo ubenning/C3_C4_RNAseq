@@ -1,0 +1,18 @@
+java -jar /home/Trinityrnaseq-v2.6.6/trinity-plugins/Trimmomatic-0.36/trimmomatic-0.36.jar PE -phred33 /home/filename_1.fastq.gz /home/filename_2.fastq.gz /home/left_paired.fq.gz /home/left_unpaired.fq.gz /home/right_paired.fq.gz /home/right_unpaired.fq.gz ILLUMINACLIP:/home/Trinityrnaseq-v2.6.6/trinity-plugins/Trimmomatic-0.36/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+  
+rm left_unpaired.fq.gz
+rm right_unpaired.fq.gz
+rm filename_1.fastq.gz
+rm filename_2.fastq.gz
+ 
+gunzip left_paired.fq.gz 
+sed '/@/s/_forward/_/g' left_paired.fq > left.fq
+rm left_paired.fq
+ 
+gunzip right_paired.fq.gz 
+sed '/@/s/_reverse/_/g' right_paired.fq > right.fq
+rm right_paired.fq
+ 
+salmon quant -i /home/transcripts_index -l A -1 left.fq -2 right.fq -o transcripts_quant
+rm left.fq
+rm right.fq
